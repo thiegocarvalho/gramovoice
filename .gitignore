@@ -47,6 +47,8 @@ out/
 
 # Build Tools & Artifacts
 appimagetool
-linuxdeploy*.AppImage
+linuxdeploy*
 AppDir/
 *.AppImage
+*.AppImage.*
+*.desktop
