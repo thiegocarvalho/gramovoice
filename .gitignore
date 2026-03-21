@@ -44,3 +44,9 @@ dist/
 # GramoVoice
 out/
 *.log
+
+# Build Tools & Artifacts
+appimagetool
+linuxdeploy*.AppImage
+AppDir/
+*.AppImage
