@@ -52,6 +52,11 @@ if [ "$OS_TYPE" == "linux" ]; then
         wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
         chmod +x linuxdeploy-x86_64.AppImage
     fi
+    if [ ! -f "./linuxdeploy-plugin-appimage-x86_64.AppImage" ]; then
+        echo "⬇️ Downloading linuxdeploy appimage plugin..."
+        wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
+        chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
+    fi
 
     cat > GramoVoice.desktop <<EOF
 [Desktop Entry]
@@ -63,14 +68,17 @@ Categories=AudioVideo;
 Terminal=false
 EOF
 
-    export LDAI_OUTPUT="GramoVoice-Studio-Linux-x86_64.AppImage"
+    export OUTPUT="GramoVoice-Studio-Linux-x86_64.AppImage"
+    mkdir -p AppDir
     
     # Use linuxdeploy to create AppImage from the PyInstaller executable
-    ./linuxdeploy-x86_64.AppImage --executable dist/GramoVoice-Studio \
+    ./linuxdeploy-x86_64.AppImage \
+        --appdir AppDir \
+        --executable dist/GramoVoice-Studio \
         --desktop-file GramoVoice.desktop \
         --icon-file assets/gramovoice_logo_horizontal.png \
         --output appimage
 
-    rm GramoVoice.desktop
+    rm -rf GramoVoice.desktop AppDir
     echo "📦 AppImage created: $LDAI_OUTPUT"
 fi
