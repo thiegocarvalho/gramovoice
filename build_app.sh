@@ -52,11 +52,14 @@ if [ "$OS_TYPE" == "linux" ]; then
         wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
         chmod +x linuxdeploy-x86_64.AppImage
     fi
-    if [ ! -f "./linuxdeploy-plugin-appimage-x86_64.AppImage" ]; then
+    if [ ! -f "./linuxdeploy-plugin-appimage" ]; then
         echo "⬇️ Downloading linuxdeploy appimage plugin..."
-        wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage
-        chmod +x linuxdeploy-plugin-appimage-x86_64.AppImage
+        wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage -O linuxdeploy-plugin-appimage
+        chmod +x linuxdeploy-plugin-appimage
     fi
+
+    # Ensure plugins in current directory are found
+    export PATH="$PATH:$(pwd)"
 
     cat > GramoVoice.desktop <<EOF
 [Desktop Entry]
