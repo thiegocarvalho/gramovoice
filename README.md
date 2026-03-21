@@ -10,7 +10,15 @@ A high-performance, professional Text-to-Speech (TTS) studio powered by **Kokoro
 - **MCP Tooling**: Native Model Context Protocol support for AI assistants.
 - **FastAPI Layer**: Robust backend with webhook support.
 
-## 🚀 Quick Start
+## 📥 Download Executables (Easy Way)
+
+The easiest way to use GramoVoice is to download the pre-compiled standalone executables! This requires zero configuration and zero programming knowledge.
+
+👉 **[Click here to go to our Releases page](https://github.com/thiegocarvalho/gramovoice/releases/latest)** and download the `.exe` (Windows) or `.AppImage` (Linux) file.
+
+---
+
+## 🚀 Developer Quick Start
 
 ### Installation
 1. Setup environment:
