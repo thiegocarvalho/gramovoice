@@ -9,7 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Kokoro ONNX core:** Fully migrated to Kokoro ONNX Text-to-Speech Engine for optimal edge performance.
-- **GitHub Actions Pipeline:** Full Windows `.exe` and Linux `.AppImage` automated PyInstaller workflows.
 - **GramoVoice Studio UI:** Custom stylized Tkinter-based user interface with real-time waveform tracking.
 - **Local MCP Server:** Native integration mode for API and Agentic environments.
 - Open Source community documents (LICENSE, CONTRIBUTING.md, SECURITY.md).

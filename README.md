@@ -4,7 +4,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Code style: PEP8](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-A high-performance, professional Text-to-Speech (TTS) studio powered by **Kokoro ONNX**. Engineered for absolute stability and premium brand identity, optimized for PT-BR and English narration.
+A Text-to-Speech (TTS) studio powered by **Kokoro ONNX**, optimized for PT-BR narration.
 
 ## ✨ Features
 - **MCP Tooling**: Native Model Context Protocol support for AI assistants.

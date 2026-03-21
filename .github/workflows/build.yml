@@ -53,7 +53,7 @@ jobs:
           path: |
             dist/*.exe
             dist/GramoVoice-Studio
-            *.AppImage
+            GramoVoice*.AppImage
 
   release:
     needs: [build]
