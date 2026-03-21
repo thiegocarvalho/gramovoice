@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# OS Specific
+.DS_Store
+Thumbs.db
+
+# App Specific
+bin/
+*.wav
+*.mp3
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Model cache (Coqui)
+.tts/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# GramoVoice
+out/
+*.log

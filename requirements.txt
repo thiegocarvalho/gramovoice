@@ -1,0 +1,22 @@
+# Core AI & Audio Processing
+kokoro-onnx
+misaki[espeak]
+huggingface_hub
+soundfile
+scipy
+numpy
+pydub
+
+# Desktop Application & Media
+customtkinter
+Pillow
+pygame
+
+# API & Web Services
+fastapi
+uvicorn
+python-multipart
+mcp
+
+# Packaging
+pyinstaller
