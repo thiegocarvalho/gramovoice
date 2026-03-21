@@ -47,19 +47,12 @@ echo "✅ Build complete! Output located in 'dist/'."
 if [ "$OS_TYPE" == "linux" ]; then
     echo "🐧 Automating AppImage generation..."
     
-    if [ ! -f "./linuxdeploy-x86_64.AppImage" ]; then
-        echo "⬇️ Downloading linuxdeploy..."
-        wget -q https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-        chmod +x linuxdeploy-x86_64.AppImage
+    # Use AppImageTool directly since PyInstaller already packaged all dependencies.
+    if [ ! -f "./appimagetool" ]; then
+        echo "⬇️ Downloading appimagetool..."
+        wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+        chmod +x appimagetool
     fi
-    if [ ! -f "./linuxdeploy-plugin-appimage" ]; then
-        echo "⬇️ Downloading linuxdeploy appimage plugin..."
-        wget -q https://github.com/linuxdeploy/linuxdeploy-plugin-appimage/releases/download/continuous/linuxdeploy-plugin-appimage-x86_64.AppImage -O linuxdeploy-plugin-appimage
-        chmod +x linuxdeploy-plugin-appimage
-    fi
-
-    # Ensure plugins in current directory are found
-    export PATH="$PATH:$(pwd)"
 
     cat > GramoVoice.desktop <<EOF
 [Desktop Entry]
@@ -71,16 +64,25 @@ Categories=AudioVideo;
 Terminal=false
 EOF
 
-    export OUTPUT="GramoVoice-Studio-Linux-x86_64.AppImage"
-    mkdir -p AppDir
+    echo "📦 Packaging AppDir..."
+    mkdir -p AppDir/usr/bin
+    cp dist/GramoVoice-Studio AppDir/usr/bin/
+    cp assets/gramovoice_logo_horizontal.png AppDir/
+    cp GramoVoice.desktop AppDir/
     
-    # Use linuxdeploy to create AppImage from the PyInstaller executable
-    ./linuxdeploy-x86_64.AppImage \
-        --appdir AppDir \
-        --executable dist/GramoVoice-Studio \
-        --desktop-file GramoVoice.desktop \
-        --icon-file assets/gramovoice_logo_horizontal.png \
-        --output appimage
+    # Create simple AppRun script required by AppImage
+    cat > AppDir/AppRun <<EOF
+#!/bin/sh
+HERE="\$(dirname "\$(readlink -f "\${0}")")"
+exec "\${HERE}/usr/bin/GramoVoice-Studio" "\$@"
+EOF
+    chmod +x AppDir/AppRun
+
+    export ARCH=x86_64
+    export OUTPUT="GramoVoice-Studio-Linux-x86_64.AppImage"
+    
+    echo "🌟 Generating AppImage..."
+    ./appimagetool AppDir "\$OUTPUT"
 
     rm -rf GramoVoice.desktop AppDir
     echo "📦 AppImage created: $LDAI_OUTPUT"
