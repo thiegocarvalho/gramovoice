@@ -33,13 +33,40 @@ fi
 
 echo "🏗️ Building $EXE_NAME for $OS_TYPE..."
 
+# Get the activated python's site-packages directory
+SITE_PACKAGES=$(python -c "import sysconfig; print(sysconfig.get_path('purelib'))")
+
 # Build Standalone Executable
 pyinstaller --noconfirm --onefile --windowed \
     --name "$EXE_NAME" \
+    --paths "$SITE_PACKAGES" \
     --add-data "assets${DATA_SEP}assets" \
+    `# Explicitly include package data for Kokoro ONNX and its G2P dependencies` \
+    --add-data "${SITE_PACKAGES}/kokoro_onnx${DATA_SEP}kokoro_onnx" \
+    --add-data "${SITE_PACKAGES}/misaki${DATA_SEP}misaki" \
+    --add-data "${SITE_PACKAGES}/language_tags${DATA_SEP}language_tags" \
+    --add-data "${SITE_PACKAGES}/espeakng_loader${DATA_SEP}espeakng_loader" \
+    --add-data "${SITE_PACKAGES}/phonemizer${DATA_SEP}phonemizer" \
+    `# Hidden imports for Audio generation & Fast API servers` \
     --hidden-import "pydub" \
     --hidden-import "soundfile" \
     --hidden-import "onnxruntime" \
+    --hidden-import "huggingface_hub" \
+    --hidden-import "kokoro_onnx" \
+    --hidden-import "misaki" \
+    --hidden-import "fastapi" \
+    --hidden-import "uvicorn" \
+    --hidden-import "pydantic" \
+    `# Custom Tkinter helper for PIL logo loading` \
+    --hidden-import "PIL._tkinter_finder" \
+    --exclude-module "torch" \
+    --exclude-module "torchvision" \
+    --exclude-module "torchaudio" \
+    --exclude-module "TTS" \
+    --exclude-module "matplotlib" \
+    --exclude-module "sklearn" \
+    --exclude-module "pandas" \
+    --icon "assets/ico.ico" \
     main.py
 
 echo "✅ Build complete! Output located in 'dist/'."
@@ -58,7 +85,7 @@ if [ "$OS_TYPE" == "linux" ]; then
 [Desktop Entry]
 Name=GramoVoice
 Exec=GramoVoice-Studio
-Icon=gramovoice_logo_horizontal
+Icon=ico
 Type=Application
 Categories=AudioVideo;
 Terminal=false
@@ -67,7 +94,7 @@ EOF
     echo "📦 Packaging AppDir..."
     mkdir -p AppDir/usr/bin
     cp dist/GramoVoice-Studio AppDir/usr/bin/
-    cp assets/gramovoice_logo_horizontal.png AppDir/
+    cp assets/ico.png AppDir/ico.png
     cp GramoVoice.desktop AppDir/
     
     # Create simple AppRun script required by AppImage
@@ -82,8 +109,8 @@ EOF
     export OUTPUT="GramoVoice-Studio-Linux-x86_64.AppImage"
     
     echo "🌟 Generating AppImage..."
-    ./appimagetool AppDir "\$OUTPUT"
+    ./appimagetool AppDir "$OUTPUT"
 
     rm -rf GramoVoice.desktop AppDir
-    echo "📦 AppImage created: $LDAI_OUTPUT"
+    echo "📦 AppImage created: $OUTPUT"
 fi
