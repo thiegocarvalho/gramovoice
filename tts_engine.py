@@ -15,7 +15,6 @@ logging.getLogger("misaki").setLevel(logging.ERROR)
 import numpy as np
 import soundfile as sf
 import urllib.request
-import json
 
 logger = logging.getLogger(__name__)
 

@@ -40,17 +40,27 @@ The easiest way to use GramoVoice is to download the pre-compiled standalone exe
 
 ## 📦 Building Releases
 
-### 🪟 Windows (Portable EXE)
-Use PyInstaller to bundle everything into a single file:
-```bash
-pip install pyinstaller
-pyinstaller --onefile --windowed --add-data "assets:assets" --name "GramoVoice-Studio" main.py
-```
+GramoVoice uses **PyInstaller** to create highly optimized, standalone executables for both Windows and Linux, bundling all necessary Kokoro engine files.
 
-### 🐧 Linux (AppImage)
-On Linux/Ubuntu, use `linuxdeploy` with the python plugin:
-1. Ensure `python-appimage` is configured.
-2. Run the provided `build_app.sh` script (requires `linuxdeploy`).
+### 🐧 Linux (AppImage) & 🪟 Windows (EXE)
+We provide a unified build script that automatically creates an optimized `.exe` on Windows or an `.AppImage` on Linux.
+
+1. Create a clean Python `venv` and install requirements:
+   ```bash
+   python3 -m venv venv && source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+2. Run the build script (Make sure to run it from the project root):
+   ```bash
+   bash build_app.sh
+   # On Windows, you can also run it directly in Git Bash or WSL.
+   ```
+
+The script will:
+- Bundle all necessary hidden imports (`PIL._tkinter_finder`, `soundfile`, etc.)
+- Bundle Kokoro ONNX and Misaki dictionary data directly into the executable.
+- Create an 80-100MB fully portable executable (compared to standard 3GB+ ML distributions).
+- Output the files to the `dist/` directory (or the project root for AppImages).
 
 ---
 
@@ -60,9 +70,10 @@ Add this to your Claude desktop config:
 {
   "mcpServers": {
     "gramovoice": {
-      "command": "/path/to/venv/bin/python",
-      "args": ["/path/to/gramovoice/main.py", "--mcp"]
+      "command": "/path/to/GramoVoice/venv/bin/python",
+      "args": ["/path/to/GramoVoice/main.py", "--mcp"]
     }
+  }
 }
 ```
 
