@@ -245,12 +245,9 @@ class TTSEngine:
                     if os.path.exists(output_path):
                         os.remove(wav_path)
                     else:
-                        logger.warning("MP3 export failed (file not created), keeping WAV.")
-                        os.rename(wav_path, output_path)
+                        logger.warning(f"MP3 export failed (file not created), keeping WAV at {wav_path}.")
                 except Exception as e:
-                    logger.warning(f"MP3 export failed: {e}, keeping WAV.")
-                    if os.path.exists(wav_path):
-                        os.rename(wav_path, output_path)
+                    logger.warning(f"MP3 export failed: {e}. Keeping WAV at {wav_path}.")
             else:
                 sf.write(output_path, combined, sample_rate)
             return True

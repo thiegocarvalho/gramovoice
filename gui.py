@@ -577,7 +577,7 @@ class GramoVoice:
             now = time.time()
             if force or (now - self.last_history_poll > 3):
                 self.last_history_poll = now
-                files = sorted([f for f in os.listdir(self.output_dir) if f.endswith(".mp3")], 
+                files = sorted([f for f in os.listdir(self.output_dir) if f.endswith(".mp3") or f.endswith(".wav")], 
                                key=lambda x: os.path.getmtime(os.path.join(self.output_dir, x)), reverse=True)[:30]
                 if files != self.last_history_files:
                     self.last_history_files = files
@@ -626,7 +626,7 @@ class GramoVoice:
             messagebox.showwarning("Warning", "Text and Project Name are required!")
             return
         
-        if not name.endswith(".mp3"): name += ".mp3"
+        if not name.endswith(".mp3") and not name.endswith(".wav"): name += ".wav"
         out_path = os.path.join(self.output_dir, name)
         
         self.is_generating = True

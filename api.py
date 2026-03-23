@@ -55,7 +55,8 @@ def start_api() -> None:
         output_dir = os.path.join(os.getcwd(), "out")
         os.makedirs(output_dir, exist_ok=True)
 
-        filename = f"{os.path.basename(req.project_name)}.mp3" if not req.project_name.endswith(".mp3") else os.path.basename(req.project_name)
+        basename = os.path.basename(req.project_name)
+        filename = f"{basename}.wav" if not (basename.endswith(".mp3") or basename.endswith(".wav")) else basename
         target_path = os.path.join(output_dir, filename)
         tasks[task_id] = {"status": "processing", "file": filename}
 
