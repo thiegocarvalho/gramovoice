@@ -236,7 +236,12 @@ class TTSEngine:
                 wav_path = output_path.replace(".mp3", ".wav")
                 sf.write(wav_path, combined, sample_rate)
                 try:
+                    import imageio_ffmpeg
                     from pydub import AudioSegment
+                    
+                    # Point PyDub to the locally bundled FFmpeg executable
+                    AudioSegment.converter = imageio_ffmpeg.get_ffmpeg_exe()
+                    
                     audio = AudioSegment.from_wav(wav_path)
                     # Use explicit tag-free export to avoid mpg123 compatibility issues on Linux
                     audio.export(output_path, format="mp3", bitrate="192k", tags={})

@@ -13,10 +13,16 @@ Pillow
 pygame
 
 # API & Web Services
+fastapi==0.115.11
+uvicorn==0.34.0
+pydantic
+pygame
+pydub
+imageio-ffmpeg
+
+# API & Web Services
 fastapi
 uvicorn
 python-multipart
 mcp
-
-# Packaging
 pyinstaller

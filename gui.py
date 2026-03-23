@@ -626,7 +626,7 @@ class GramoVoice:
             messagebox.showwarning("Warning", "Text and Project Name are required!")
             return
         
-        if not name.endswith(".mp3") and not name.endswith(".wav"): name += ".wav"
+        if not name.endswith(".mp3") and not name.endswith(".wav"): name += ".mp3"
         out_path = os.path.join(self.output_dir, name)
         
         self.is_generating = True

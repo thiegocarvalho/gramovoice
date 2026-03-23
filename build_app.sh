@@ -47,8 +47,10 @@ pyinstaller --noconfirm --onefile --windowed \
     --add-data "${SITE_PACKAGES}/language_tags${DATA_SEP}language_tags" \
     --add-data "${SITE_PACKAGES}/espeakng_loader${DATA_SEP}espeakng_loader" \
     --add-data "${SITE_PACKAGES}/phonemizer${DATA_SEP}phonemizer" \
+    --add-data "${SITE_PACKAGES}/imageio_ffmpeg${DATA_SEP}imageio_ffmpeg" \
     `# Hidden imports for Audio generation & Fast API servers` \
     --hidden-import "pydub" \
+    --hidden-import "imageio_ffmpeg" \
     --hidden-import "soundfile" \
     --hidden-import "onnxruntime" \
     --hidden-import "huggingface_hub" \

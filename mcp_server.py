@@ -56,7 +56,7 @@ async def handle_call_tool(name: str, arguments: dict | None) -> list[TextConten
     os.makedirs(output_dir, exist_ok=True)
 
     basename = os.path.basename(project_name)
-    filename = f"{basename}.wav" if not (basename.endswith(".mp3") or basename.endswith(".wav")) else basename
+    filename = f"{basename}.mp3" if not (basename.endswith(".mp3") or basename.endswith(".wav")) else basename
     target_path = os.path.join(output_dir, filename)
 
     print(f"MCP Tool: Synthesizing {filename}...", file=sys.stderr, flush=True)
