@@ -5,6 +5,7 @@ import time
 import threading
 import subprocess
 import argparse
+import webbrowser
 from typing import List, Optional, Callable
 from pathlib import Path
 
@@ -289,6 +290,15 @@ class GramoVoice:
         self.root.geometry("1100x720")
         self.root.minsize(1000, 600)
         self.root.configure(bg=COLOR_BG)
+        
+        # Set Window Icon
+        try:
+            icon_path = Path(__file__).parent / "assets" / "ico.png"
+            if icon_path.exists():
+                self.icon_img = tk.PhotoImage(file=str(icon_path))
+                self.root.iconphoto(True, self.icon_img)
+        except Exception as e:
+            logger.error(f"Error loading window icon: {e}")
 
     def _init_log_handler(self):
         class TkLogHandler(logging.Handler):
@@ -489,6 +499,37 @@ class GramoVoice:
         self.log_console.pack(side="left", fill="both", expand=True)
         log_scroll.pack(side="right", fill="y")
         
+        # Footer
+        footer_cont = tk.Frame(content, bg=COLOR_BG)
+        footer_cont.pack(side="bottom", fill="x", pady=(15, 0))
+        
+        footer = tk.Frame(footer_cont, bg=COLOR_BG)
+        footer.pack(expand=True)
+        
+        tk.Label(footer, text="made by ", font=("", 9), bg=COLOR_BG, fg=COLOR_TEXT_DIM).pack(side="left")
+        
+        lbl_user = tk.Label(footer, text="unusual_zeru", font=("", 9), bg=COLOR_BG, fg=COLOR_ACCENT, cursor="hand2")
+        lbl_user.pack(side="left")
+        lbl_user.bind("<Button-1>", lambda e: self._open_url("https://x.com/unusual_zeru"))
+        lbl_user.bind("<Enter>", lambda e: lbl_user.configure(fg=COLOR_ACCENT_HOVER))
+        lbl_user.bind("<Leave>", lambda e: lbl_user.configure(fg=COLOR_ACCENT))
+        
+        tk.Label(footer, text=", one of the ", font=("", 9), bg=COLOR_BG, fg=COLOR_TEXT_DIM).pack(side="left")
+        
+        lbl_aliens = tk.Label(footer, text="aliens 👽🖖", font=("", 9), bg=COLOR_BG, fg=COLOR_ACCENT, cursor="hand2")
+        lbl_aliens.pack(side="left")
+        lbl_aliens.bind("<Button-1>", lambda e: self._open_url("https://defiverso.com"))
+        lbl_aliens.bind("<Enter>", lambda e: lbl_aliens.configure(fg=COLOR_ACCENT_HOVER))
+        lbl_aliens.bind("<Leave>", lambda e: lbl_aliens.configure(fg=COLOR_ACCENT))
+        
+        tk.Label(footer, text=" | github: ", font=("", 9), bg=COLOR_BG, fg=COLOR_TEXT_DIM).pack(side="left")
+        
+        lbl_repo = tk.Label(footer, text="gramovoice", font=("", 9), bg=COLOR_BG, fg=COLOR_ACCENT, cursor="hand2")
+        lbl_repo.pack(side="left")
+        lbl_repo.bind("<Button-1>", lambda e: self._open_url("https://github.com/thiegocarvalho/gramovoice"))
+        lbl_repo.bind("<Enter>", lambda e: lbl_repo.configure(fg=COLOR_ACCENT_HOVER))
+        lbl_repo.bind("<Leave>", lambda e: lbl_repo.configure(fg=COLOR_ACCENT))
+
         # Initial flush to show logs captured during startup
         self.root.after(100, self._flush_log)
 
@@ -523,6 +564,13 @@ class GramoVoice:
             if sys.platform == "win32": os.startfile(self.output_dir)
             else: subprocess.run(["xdg-open", self.output_dir])
         except Exception: pass
+
+    def _open_url(self, url: str) -> None:
+        """Opens the specified URL in the default web browser."""
+        try:
+            webbrowser.open(url)
+        except Exception as e:
+            logger.error(f"Failed to open URL: {e}")
 
     def refresh_history(self, force=False):
         try:
