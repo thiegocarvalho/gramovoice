@@ -5,7 +5,7 @@ from mcp.server.stdio import stdio_server
 from mcp.server import Server
 from mcp.types import Tool, TextContent
 from tts_engine import TTSEngine, AVAILABLE_VOICES
-from utils import load_settings, setup_bundle_paths, setup_environment
+from utils import load_settings, setup_bundle_paths, setup_environment, sanitize_filename
 
 setup_bundle_paths()
 setup_environment()
@@ -55,7 +55,7 @@ async def handle_call_tool(name: str, arguments: dict | None) -> list[TextConten
     output_dir = os.path.join(os.getcwd(), "out")
     os.makedirs(output_dir, exist_ok=True)
 
-    basename = os.path.basename(project_name)
+    basename = sanitize_filename(os.path.basename(project_name))
     filename = f"{basename}.mp3" if not (basename.endswith(".mp3") or basename.endswith(".wav")) else basename
     target_path = os.path.join(output_dir, filename)
 

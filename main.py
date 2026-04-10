@@ -5,7 +5,7 @@ from utils import setup_bundle_paths, setup_environment
 setup_bundle_paths()
 setup_environment()
 
-from gui import main as gui_main
+from gui import main as gui_main  # noqa: E402
 
 def start_api():
     try:

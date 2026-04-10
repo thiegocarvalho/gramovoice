@@ -7,7 +7,7 @@ import uvicorn
 from typing import Dict, Any, Optional
 
 from tts_engine import TTSEngine, AVAILABLE_VOICES
-from utils import load_settings
+from utils import load_settings, sanitize_filename
 
 def start_api() -> None:
     """Initializes and runs the FastAPI server for GramoVoice."""
@@ -55,7 +55,7 @@ def start_api() -> None:
         output_dir = os.path.join(os.getcwd(), "out")
         os.makedirs(output_dir, exist_ok=True)
 
-        basename = os.path.basename(req.project_name)
+        basename = sanitize_filename(os.path.basename(req.project_name))
         filename = f"{basename}.mp3" if not (basename.endswith(".mp3") or basename.endswith(".wav")) else basename
         target_path = os.path.join(output_dir, filename)
         tasks[task_id] = {"status": "processing", "file": filename}

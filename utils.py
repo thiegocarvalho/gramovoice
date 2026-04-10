@@ -1,7 +1,6 @@
 import os
 import json
 import logging
-import sys
 from pathlib import Path
 
 logger = logging.getLogger(__name__)
@@ -44,3 +43,11 @@ def save_settings(settings):
         logger.info("Settings saved.")
     except Exception as e:
         logger.error(f"Error saving settings: {e}")
+
+def sanitize_filename(name: str) -> str:
+    """Removes or replaces characters that are illegal in Windows filenames."""
+    # Forbidden in Windows: < > : " / \ | ? *
+    illegal = '<>:"/\\|?*'
+    for char in illegal:
+        name = name.replace(char, "_")
+    return name.strip()

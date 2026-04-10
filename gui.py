@@ -6,18 +6,16 @@ import threading
 import subprocess
 import argparse
 import webbrowser
-from typing import List, Optional, Callable
+from typing import Callable
 from pathlib import Path
 
 import tkinter as tk
-from tkinter import ttk, messagebox, font
-import numpy as np
-import soundfile as sf
+from tkinter import ttk, messagebox
 from pydub import AudioSegment
 from PIL import Image, ImageTk
 
 from tts_engine import TTSEngine, AVAILABLE_VOICES
-from utils import setup_bundle_paths, setup_environment, load_settings, save_settings
+from utils import setup_bundle_paths, setup_environment, load_settings, save_settings, sanitize_filename
 
 setup_bundle_paths()
 setup_environment()
@@ -561,9 +559,12 @@ class GramoVoice:
 
     def _open_output_folder(self):
         try:
-            if sys.platform == "win32": os.startfile(self.output_dir)
-            else: subprocess.run(["xdg-open", self.output_dir])
-        except Exception: pass
+            if sys.platform == "win32":
+                os.startfile(self.output_dir)
+            else:
+                subprocess.run(["xdg-open", self.output_dir])
+        except Exception:
+            pass
 
     def _open_url(self, url: str) -> None:
         """Opens the specified URL in the default web browser."""
@@ -581,7 +582,8 @@ class GramoVoice:
                                key=lambda x: os.path.getmtime(os.path.join(self.output_dir, x)), reverse=True)[:30]
                 if files != self.last_history_files:
                     self.last_history_files = files
-                    for widget in self.history_scroll.winfo_children(): widget.destroy()
+                    for widget in self.history_scroll.winfo_children():
+                        widget.destroy()
                     self.cards = {}
                     for f in files:
                         full = os.path.join(self.output_dir, f)
@@ -594,23 +596,29 @@ class GramoVoice:
             for path, card in self.cards.items():
                 card.update_state(path == active, playing if path == active else False, 
                                   self.player.duration, self.player.position)
-        except Exception: pass
+        except Exception:
+            pass
 
     def _toggle_play(self, filename):
         full = os.path.join(self.output_dir, filename)
         if self.player.current_file == full:
-            if self.player.is_playing: self.player.pause()
-            else: self.player.unpause()
-        else: self.player.play(full)
+            if self.player.is_playing:
+                self.player.pause()
+            else:
+                self.player.unpause()
+        else:
+            self.player.play(full)
         self.refresh_history(force=True)
 
     def _seek_audio(self, pos):
-        if self.player: self.player.seek(pos)
+        if self.player:
+            self.player.seek(pos)
 
     def _playback_monitor(self):
         while self.is_running:
             if self.player and (self.player.is_playing or self.player.is_finished()):
-                if self.player.is_finished(): self.player.stop()
+                if self.player.is_finished():
+                    self.player.stop()
                 self.root.after(0, self.refresh_history)
             time.sleep(0.1)
 
@@ -621,12 +629,13 @@ class GramoVoice:
             return
 
         text = self.txt_input.get("1.0", "end-1c").strip()
-        name = self.txt_project_name.get().strip()
+        name = sanitize_filename(self.txt_project_name.get().strip())
         if not text or not name:
             messagebox.showwarning("Warning", "Text and Project Name are required!")
             return
         
-        if not name.endswith(".mp3") and not name.endswith(".wav"): name += ".mp3"
+        if not name.endswith(".mp3") and not name.endswith(".wav"):
+            name += ".mp3"
         out_path = os.path.join(self.output_dir, name)
         
         self.is_generating = True
@@ -672,9 +681,14 @@ def main(skip_engine=False):
     # Mock for testing if needed
     if skip_engine:
         class MockEngine:
-            def __init__(self): self.max_chars = 203; self.default_language = "pt"
-            def load_model(self, **kwargs): return True
-            def synthesize(self, **kwargs): time.sleep(2); return True
+            def __init__(self):
+                self.max_chars = 203
+                self.default_language = "pt"
+            def load_model(self, **kwargs):
+                return True
+            def synthesize(self, **kwargs):
+                time.sleep(2)
+                return True
         engine = MockEngine()
     else:
         engine = TTSEngine()

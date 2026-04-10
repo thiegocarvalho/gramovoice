@@ -12,9 +12,9 @@ setup_environment()
 # Silence benign word count mismatch warnings from the G2P engine
 logging.getLogger("misaki").setLevel(logging.ERROR)
 
-import numpy as np
-import soundfile as sf
-import urllib.request
+import numpy as np  # noqa: E402
+import soundfile as sf  # noqa: E402
+import urllib.request  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
