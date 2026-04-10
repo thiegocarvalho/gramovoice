@@ -75,7 +75,8 @@ def start_api() -> None:
                 try:
                     import httpx
                     httpx.post(r.webhook_url, json={"task_id": tid, "status": tasks[tid]["status"], "file": r.project_name, "path": path})
-                except: pass
+                except Exception:
+                    pass
 
         background_tasks.add_task(run_background_synthesis, task_id, req, target_path)
         return {"status": "queued", "task_id": task_id}

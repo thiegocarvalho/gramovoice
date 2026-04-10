@@ -125,8 +125,10 @@ class AudioPlayer:
 
     @property
     def position(self):
-        if not self._file: return 0
-        if self._paused: return self._pause_pos
+        if not self._file:
+            return 0
+        if self._paused:
+            return self._pause_pos
         return self._pause_pos + (time.time() - self._start_time)
 
     def is_finished(self):
@@ -188,7 +190,8 @@ class ProjectCard(tk.Frame): # type: ignore
             self.on_seek(float(self.slider.get()))
             
     def update_state(self, is_active, is_playing, duration, position):
-        if not self.winfo_exists(): return
+        if not self.winfo_exists():
+            return
         
         if is_active != self.is_active:
             self.is_active = is_active
@@ -260,7 +263,8 @@ class GramoVoice:
     def _load_logo(self, width=240):
         try:
             logo_path = Path(__file__).parent / "assets" / "gramovoice_logo_horizontal.png"
-            if not logo_path.exists(): return None
+            if not logo_path.exists():
+                return None
             
             img = Image.open(logo_path)
             # Resize, keep aspect ratio
@@ -310,7 +314,8 @@ class GramoVoice:
                     # Terminal debug to confirm handler is working
                     print(f"[HANDLER] {msg}")
                     self.callback(msg)
-                except Exception: pass
+                except Exception:
+                    pass
 
         handler = TkLogHandler(self._add_log_entry)
         handler.setFormatter(logging.Formatter('%(asctime)s - %(message)s', datefmt='%H:%M:%S'))
@@ -324,13 +329,17 @@ class GramoVoice:
 
     def _add_log_entry(self, message):
         self._log_lines.append(message)
-        if len(self._log_lines) > 500: self._log_lines = self._log_lines[-500:]
+        if len(self._log_lines) > 500:
+            self._log_lines = self._log_lines[-500:]
         if self.is_running:
-            try: self.root.after(10, self._flush_log)
-            except Exception: pass
+            try:
+                self.root.after(10, self._flush_log)
+            except Exception:
+                pass
 
     def _flush_log(self):
-        if not hasattr(self, 'log_console') or not self.log_console.winfo_exists(): return
+        if not hasattr(self, 'log_console') or not self.log_console.winfo_exists():
+            return
         try:
             self.log_console.configure(state="normal")
             self.log_console.delete("1.0", "end")
@@ -339,7 +348,8 @@ class GramoVoice:
             self.log_console.insert("end", "\n".join(display_lines[-80:]))
             self.log_console.see("end")
             self.log_console.configure(state="disabled")
-        except Exception: pass
+        except Exception:
+            pass
 
     def _show_splash(self):
         self.splash_frame = tk.Frame(self.root, bg=COLOR_BG)
@@ -361,7 +371,8 @@ class GramoVoice:
         self.splash_progress.pack()
 
     def _start_initialization(self):
-        if not self.is_running: return
+        if not self.is_running:
+            return
         try:
             self.player = AudioPlayer()
             threading.Thread(target=self._initialization_flow, daemon=True).start()
@@ -387,7 +398,8 @@ class GramoVoice:
             self.root.after(500, self._show_error)
 
     def _show_error(self):
-        for w in self.splash_frame.winfo_children(): w.destroy()
+        for w in self.splash_frame.winfo_children():
+            w.destroy()
         tk.Label(self.splash_frame, text="ERROR LOADING ENGINE", font=("", 20), bg=COLOR_BG, fg=COLOR_CANCEL).pack(expand=True)
 
     def _transition_to_main(self):
@@ -543,7 +555,8 @@ class GramoVoice:
         voices = [v for v in AVAILABLE_VOICES.keys()]
         self.drop_voices.configure(values=voices)
         saved = self.settings.get("model", "Dora (Feminino) - PT")
-        if saved not in voices: saved = voices[0] if voices else ""
+        if saved not in voices:
+            saved = voices[0] if voices else ""
         self.drop_voices.set(saved)
         self.sld_speed.set(float(self.settings.get("speed", 1.0)))
 
@@ -554,7 +567,8 @@ class GramoVoice:
 
     def _on_close(self):
         self.is_running = False
-        if self.player: self.player.stop()
+        if self.player:
+            self.player.stop()
         self.root.destroy()
 
     def _open_output_folder(self):
