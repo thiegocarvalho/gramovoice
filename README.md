@@ -1,71 +1,77 @@
-# GramoVoice Studio Edition v1.2.0
+# GramoVoice Studio Edition v1.3.0
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Code style: PEP8](https://img.shields.io/badge/code%20style-pep8-green.svg)](https://www.python.org/dev/peps/pep-0008/)
 
-A Text-to-Speech (TTS) studio powered by **Kokoro ONNX**, optimized for PT-BR narration.
+A Text-to-Speech (TTS) studio powered by **Kokoro ONNX**, optimized for PT-BR narration with full Windows and Linux support.
+
+---
 
 ## ✨ Features
-- **MCP Tooling**: Native Model Context Protocol support for AI assistants.
-- **FastAPI Layer**: Robust backend with webhook support.
 
-## 📥 Download Executables (Easy Way)
+- **12 voices** — 3 PT-BR (Dora, Alex, Santa) + 9 English (Bella, Nicole, Sarah, Sky, Alice, Adam, Michael, Liam, George)
+- **pt-BR text preprocessing** — markdown, URLs, R$/currency, percentages, ordinals, abbreviations and acronyms normalized automatically before synthesis
+- **MP3 quality selector** — Compact VBR / Balanced VBR (default) / Standard 128k / High 192k
+- **Streaming pipeline** — audio written chunk-by-chunk directly to disk, no RAM spike for large files
+- **Zero system dependencies** — bundled FFmpeg via `imageio-ffmpeg`, no external install required
+- **FastAPI layer** — REST backend with webhook support
+- **MCP tooling** — native Model Context Protocol support for AI assistants
 
-The easiest way to use GramoVoice is to download the pre-compiled standalone executables! This requires zero configuration and zero programming knowledge.
+---
 
-👉 **[Click here to go to our Releases page](https://github.com/thiegocarvalho/gramovoice/releases/latest)** and download the `.exe` (Windows) or `.AppImage` (Linux) file.
+## 📥 Download (Easy Way)
+
+Download the pre-compiled standalone executable — zero configuration, zero programming knowledge required.
+
+👉 **[Releases page](https://github.com/thiegocarvalho/gramovoice/releases/latest)** — grab the `.exe` (Windows) or `.AppImage` (Linux).
+
+> **First run:** the app downloads the Kokoro model (~2 GB) automatically and caches it at `~/.cache/huggingface/`. Subsequent launches are instant.
 
 ---
 
 ## 🚀 Developer Quick Start
 
-### Installation
-1. Setup environment:
-   ```bash
-   python3 -m venv venv && source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-2. Start the Studio:
-   ```bash
-   python main.py
-   ```
+```bash
+python3 -m venv venv && source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
 
 ### Operational Modes
-- **GUI (Studio)**: `python main.py`
-- **Server (API)**: `python main.py --api`
-- **Agent (MCP)**: `python main.py --mcp`
+
+| Command | Mode |
+|---|---|
+| `python main.py` | GUI Studio (default) |
+| `python main.py --api` | FastAPI server on `0.0.0.0:8000` |
+| `python main.py --mcp` | MCP stdio server |
+| `python main.py --skip-engine` | GUI without model (UI diagnostics) |
+
+### Output files
+
+Generated audio is saved to `~/GramoVoice/` by default. You can change this path in the app settings (`~/.gramovoice/settings.json`).
 
 ---
 
 ## 📦 Building Releases
 
-GramoVoice uses **PyInstaller** to create highly optimized, standalone executables for both Windows and Linux, bundling all necessary Kokoro engine files.
+GramoVoice uses **PyInstaller** to produce a fully portable 80–100 MB executable (vs. 3 GB+ standard ML distributions).
 
-### 🐧 Linux (AppImage) & 🪟 Windows (EXE)
-We provide a unified build script that automatically creates an optimized `.exe` on Windows or an `.AppImage` on Linux.
+```bash
+python3 -m venv venv && source venv/bin/activate
+pip install -r requirements.txt
+bash build_app.sh
+```
 
-1. Create a clean Python `venv` and install requirements:
-   ```bash
-   python3 -m venv venv && source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-2. Run the build script (Make sure to run it from the project root):
-   ```bash
-   bash build_app.sh
-   # On Windows, you can also run it directly in Git Bash or WSL.
-   ```
-
-The script will:
-- Bundle all necessary hidden imports (`PIL._tkinter_finder`, `soundfile`, etc.)
-- Bundle Kokoro ONNX and Misaki dictionary data directly into the executable.
-- Create an 80-100MB fully portable executable (compared to standard 3GB+ ML distributions).
-- Output the files to the `dist/` directory (or the project root for AppImages).
+Outputs:
+- **Linux** → `GramoVoice-Studio-Linux-x86_64.AppImage`
+- **Windows** → `dist/GramoVoice-Studio.exe`
 
 ---
 
 ## 🤖 MCP Integration
-Add this to your Claude desktop config:
+
+Add this to your AI assistant's MCP config:
+
 ```json
 {
   "mcpServers": {
@@ -77,14 +83,17 @@ Add this to your Claude desktop config:
 }
 ```
 
+Available tool: `generate_audio` — synthesizes text to MP3/WAV using any of the 12 available voices.
+
 ---
 
 ## 🤝 Contributing
-Contributions, issues, and feature requests are welcome!
-Feel free to check out the [issues page](https://github.com/thiegocarvalho/gramovoice/issues).
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+
+Contributions, issues and feature requests are welcome.  
+Check the [issues page](https://github.com/thiegocarvalho/gramovoice/issues) and read [CONTRIBUTING.md](CONTRIBUTING.md) before submitting a pull request.
 
 ---
 
 ## 📝 License
-This project is [MIT](LICENSE) licensed.
+
+[MIT](LICENSE) — © Thiego Carvalho
